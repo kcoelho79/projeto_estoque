@@ -23,21 +23,23 @@ def estoque_detalhe(request, id_produto=None):
 
     if request.method == 'POST':
     # recebe os dados do formulario
-            item = request.POST.get('f_item')
-            data_inicial = request.POST.get('f_data_inicial')
-            data_final = request.POST.get('f_data_final')
-
-            if data_inicial and data_final:
-                HttpResponse("recebido datainicia e final")
-            
-            if data_inicial:
-                ano_ini,mes_ini,dia_ini = data_inicial.split(',')
-                data_inicial_limpa= datetime.date(int(ano_ini),int(mes_ini),int(dia_ini))
-                #produto = get_object_or_404(Produto, pk=int(item), data_cad__date=data_inicial_limpa)
-                estoque = get_list_or_404(Estoque, produto__id=int(item), data__date=data_inicial_limpa)
-            else:
-                estoque = get_list_or_404(Estoque, produto__id=int(item))
-            total = Estoque.objects.filter(produto=int(item)).aggregate(Sum('qtd'))
+        item = request.POST.get('f_item')
+        data_inicial = request.POST.get('f_data_inicial')
+        data_final = request.POST.get('f_data_final')
+        # iniciar validacao dos campos de filtro data
+        if data_inicial:
+            ano_ini,mes_ini,dia_ini = data_inicial.split(',')
+            data_inicial_limpa= datetime.date(int(ano_ini),int(mes_ini),int(dia_ini))
+            estoque = get_list_or_404(Estoque, produto__id=int(item), data__date=data_inicial_limpa)
+            # se data inicial e final recebeu data nao vazio
+            if data_final:
+                ano_final,mes_final,dia_final = data_final.split(',')
+                data_final_limpa= datetime.date(int(ano_final),int(mes_final),int(dia_final))
+                estoque = get_list_or_404(Estoque, produto__id=int(item), data__date__range=(data_inicial_limpa, data_final_limpa))
+        # filtro data esta vazio
+        else:
+            estoque = get_list_or_404(Estoque, produto__id=int(item))
+        total = Estoque.objects.filter(produto=int(item)).aggregate(Sum('qtd'))
     else:
         estoque = get_list_or_404(Estoque, produto__id=id_produto)
         total = Estoque.objects.filter(produto=id_produto).aggregate(Sum('qtd'))
