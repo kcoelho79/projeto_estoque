@@ -1,0 +1,20 @@
+<title>Estoque</title>
+<style media="screen">
+  table, th, td {border: 1px solid #000;}
+  th, td {padding: 5px;}
+</style>
+<h1>Lista do Estoque</h1>
+<table>
+  <tr>
+    <th>Produto</th>
+    <th>Qtd Estoque</th>
+    </tr>
+{% for item in produtos %}
+  <tr>
+    <td>{{ item.item_text }}</td>
+    <td><a href="/estoque/estoque_detalhe/{{item.id}}/">{{ item.total_estoque}}</a></td>
+  </tr>
+{% endfor %}
+</table>
+<br>
+<a href="{% url 'index' %}">VOLTAR MENU</a>

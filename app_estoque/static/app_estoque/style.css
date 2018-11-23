@@ -1,0 +1,12 @@
+li.a {
+  color: green;
+}
+
+h1 a {
+  color: #FCA205;
+}
+# ES = Tabelas menu de entrada e saida
+table, th, td {
+  border: 1px solid #000;
+
+}

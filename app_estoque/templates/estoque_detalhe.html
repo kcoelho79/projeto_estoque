@@ -1,0 +1,67 @@
+<!doctype html>
+{# teste #}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Movimentacao de estoque</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker({dateFormat: "yy,mm,dd"} );
+    $( "#datepicker2" ).datepicker({dateFormat: "yy,mm,dd"} );
+  } );
+  </script>
+</head>
+<body>
+
+<style media="screen">
+  table, th, td {border: 1px solid #000;}
+  th, td {padding: 5px;}
+</style>
+<h2>Historico de entrada e saida por item no estoque</h2>
+<h3>Filtros de buscas</h3>
+<form class="" action="" method="POST">
+  {% csrf_token %}
+
+  codigo <input type="text" required="yes" size="4" maxlength="3" name="f_item" value="">
+  data inicial: <input type="text" id="datepicker" name="f_data_inicial" value="">
+  data final:   <input type="text" id="datepicker2" name="f_data_final"   value="">
+  <input type="submit" name="" value="Pesquisar">
+</form>
+
+<table>
+  <h2>Movimentaçao do Estoque</h2>
+
+<h1></h1>
+  <tr>
+    <td>Data</td>
+    <td>Qtd</td>
+    <td>Produto</td>
+  </tr>
+  {% for item in estoque %}
+  <tr>
+    <td>{{ item.data|date:"d M y"}}</td>
+    <td>{{ item.qtd }}</td>
+    <td>{{ item.produto}}</td>
+  </tr>
+  {% endfor %}
+  <tr>
+    <td>Total</td>
+    <td colspan="2">{{total}}</td>
+  </tr>
+</table>
+
+<br>
+  <a href="{% url 'lista' %}">VOLTAR ESTOQUE</a><br>
+  <br>
+  <a href="{% url 'index' %}">VOLTAR MENU</a>
+
+
+
+
+ </body>
+ </html>

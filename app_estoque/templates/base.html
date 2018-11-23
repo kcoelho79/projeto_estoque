@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ t_views }} de Produto</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app_estoque/style.css' %}">
+
+  <style>
+    table, th, td {border: 1px solid #000;}
+    th, td {padding: 5px;}
+  </style>
+
+  </head>
+  <body>
+
+    <h1> {{ t_views|upper }} DE PRODUTOS </h1>
+    <h2> {{ status }} </h2>
+
+    {% block url %}
+    <form action="{% url '{{ t_views }}' %}" method="post">
+    {% endblock %}
+    {% csrf_token %}
+    <fieldset>
+      <legend>{{ t_views|upper }} de Produto</legend>
+      <table>
+        <tr>
+          <th>Codigo</th>
+          <th>Produto</th>
+          <th>Quantidade</th>
+        </tr>
+      {% for item in produtos %}
+        <tr>
+          <td><input type="text" readonly size="5" maxlength="3" name="item" id="item{{ forloop.counter }}" value="{{item.id}}"></td>
+          <td><label for="item{{ forloop.counter }}">{{ item.item_text }}</label></td>
+
+          <td><input type="number" min="0" max="50" name="f_qtd" id="item{{ forloop.counter }}" size="3" value="0" ></td>
+        </tr>
+      {% endfor %}
+      </table>
+
+      <br>
+      data: <input type="datetime-local" name="data" value="{% now "d/M/y" %}">
+
+      <input type="submit" value="inserir">
+      </fieldset>
+      </form>
+
+    {{ mensagem }}
+    <a href="{% url 'index' %}">VOLTAR MENU</a>
+  </body>
+</html>

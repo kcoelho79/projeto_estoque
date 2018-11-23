@@ -1,0 +1,20 @@
+<style media="screen">
+  table, th, td {border: 1px solid #000;}
+  th, td {padding: 5px;}
+</style>
+<h1>Lista de Compra de Produtos</h1>
+{% load mathfilters %}
+<table>
+  <tr>
+    <th>Item de compra</th>
+    <th>Quantidade</th>
+  </tr>
+{% for produto in produtos %}
+  <tr>
+    <th>{{ produto.item_text }}</th>
+    <th>{{produto.min_estoque|sub:produto.total_estoque}}</th>
+  </tr>
+{% endfor %}
+</table><br>
+
+<a href="{% url 'index' %}">VOLTAR MENU</a>
