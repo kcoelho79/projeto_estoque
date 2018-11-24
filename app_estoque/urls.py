@@ -5,10 +5,8 @@ from . import views
 urlpatterns = [
     #/estoque
     path('', views.index, name='index'),
-    #/estoque/entrada
-    path('entrada', views.entrada, name='entrada'),
-    #/estoque/saida
-    path('saida', views.saida, name='saida'),
+    #/estoque/entrada  ou /estoque/saida
+    path('estoque/<operacao>/', views.estoque, name='estoque'),
     path('lista', views.lista, name='lista'),
     path('cadastro', views.cadastro, name='cadastro'),
     path('lista_compra', views.lista_compra, name='lista_compra'),

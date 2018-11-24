@@ -3,7 +3,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>{{ t_views }} de Produto</title>
+    <title>{{ operacao }} de Produto</title>
     <link rel="stylesheet" type="text/css" href="{% static 'app_estoque/style.css' %}">
 
   <style>
@@ -14,15 +14,13 @@
   </head>
   <body>
 
-    <h1> {{ t_views|upper }} DE PRODUTOS </h1>
+    <h1> {{ operacao|upper }} DE PRODUTOS </h1>
     <h2> {{ status }} </h2>
 
-    {% block url %}
-    <form action="{% url '{{ t_views }}' %}" method="post">
-    {% endblock %}
+    <form action="{% url 'estoque' operacao=operacao %}" method="post">
     {% csrf_token %}
     <fieldset>
-      <legend>{{ t_views|upper }} de Produto</legend>
+      <legend>{{ operacao|upper }} de Produto</legend>
       <table>
         <tr>
           <th>Codigo</th>

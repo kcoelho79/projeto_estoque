@@ -31,6 +31,7 @@ def estoque_detalhe(request, id_produto=None):
             ano_ini,mes_ini,dia_ini = data_inicial.split(',')
             data_inicial_limpa= datetime.date(int(ano_ini),int(mes_ini),int(dia_ini))
             estoque = get_list_or_404(Estoque, produto__id=int(item), data__date=data_inicial_limpa)
+
             # se data inicial e final recebeu data nao vazio
             if data_final:
                 ano_final,mes_final,dia_final = data_final.split(',')
@@ -39,13 +40,14 @@ def estoque_detalhe(request, id_produto=None):
         # filtro data esta vazio
         else:
             estoque = get_list_or_404(Estoque, produto__id=int(item))
-        total = Estoque.objects.filter(produto=int(item)).aggregate(Sum('qtd'))
+
     else:
         estoque = get_list_or_404(Estoque, produto__id=id_produto)
-        total = Estoque.objects.filter(produto=id_produto).aggregate(Sum('qtd'))
+    # usando o sum para somar uma lista de valores que recebe do obj estoque
+    total = sum([ i.qtd for i in estoque])
     # variavel TOTAL resultado da soma de todos ent e saida do produto
     # Sum (biblioteca) faz a Soma e retorar um DIC campo__sum
-    return render(request, 'estoque_detalhe.html', {'estoque':estoque, 'total':total['qtd__sum']})
+    return render(request, 'estoque_detalhe.html', {'estoque':estoque, 'total':total})
 
 def cadastro(request):
     mensagem=""
@@ -62,16 +64,15 @@ def cadastro(request):
 
     return render(request, 'cadastro.html', {'mensagem':mensagem})
 
-# sugestao transformar as duas views de entrada e saida em estoque_detalhe
-# para deixar o codigo mais limpo e evitar repeticao
-def saida(request):
+
+def estoque(request, operacao=None):
+    # operacao = operacao de entrada (soma) ou saida (subtrai) do estoque
     produtos = Produto.objects.all()
-    status=""
     if request.method == 'POST':
-    # lqtd e litens sao LIsta que recebem dados formulario, criadas
-    # para facilitar
         lqtd = request.POST.getlist('f_qtd')
         litens = request.POST.getlist('item')
+
+
     # pega o tamanho da interaçao (qtos itens teve atualizacao no estoque)
     # para gerar loop e gravar as atualizacoes no baco
         tamanho=len(litens)
@@ -81,41 +82,15 @@ def saida(request):
     # para quando for buscar as posicao do vetor,
     # entao para o item que tem 0 não sera gravado no banco
             if not lqtd[pos] == '0':
+                if operacao =="saida":
+                    lqtd[pos] = -1 * int(lqtd[pos])
                 produto = Produto.objects.get(id=litens[pos])
-                produto.estoque_set.create(qtd=-int(lqtd[pos]),situacao='saida')
-                produto.total_estoque= produto.total_estoque - int(lqtd[pos])
-                produto.save()
-            else:
-                continue
-
-        return HttpResponseRedirect(reverse('saida'))
-    else:
-        return render(request, 'saida.html', {'produtos':produtos, 'status':status, 't_views':"saida"})
-
-def entrada(request):
-    produtos = Produto.objects.all()
-    status=""
-    if request.method == 'POST':
-    # lqtd e litens sao LIsta que recebem dados formulario, criadas
-    # para facilitar
-        lqtd = request.POST.getlist('f_qtd')
-        litens = request.POST.getlist('item')
-    # pega o tamanho da interaçao (qtos itens teve atualizacao no estoque)
-    # para gerar loop e gravar as atualizacoes no baco
-        tamanho=len(litens)
-        for pos in range(tamanho):
-    # no form os itens (produto) que nao serao atualizado, receberam '0' de qtd
-    # isso e necessario para que as listas de itens e qtd tenha o mesmo tamanho,
-    # para quando for buscar as posicao do vetor,
-    # entao para o item que tem 0 não sera gravado no banco
-            if not lqtd[pos] == '0':
-                produto = Produto.objects.get(id=litens[pos])
-                produto.estoque_set.create(qtd=int(lqtd[pos]),situacao='entrada')
+                produto.estoque_set.create(qtd=(lqtd[pos]),situacao=operacao)
                 produto.total_estoque= produto.total_estoque + int(lqtd[pos])
                 produto.save()
             else:
                 continue
 
-        return HttpResponseRedirect(reverse('entrada'))
+        return HttpResponseRedirect(reverse('estoque', args=(operacao,)), {'operacao':operacao})
     else:
-        return render(request, 'entrada.html', {'produtos':produtos, 'status':status, 't_views':"entrada"})
+        return render(request, 'estoque.html', {'produtos':produtos, 'operacao':operacao})
