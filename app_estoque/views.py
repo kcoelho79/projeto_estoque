@@ -5,6 +5,8 @@ from .forms import EntradaForm
 from .models import Produto,Estoque
 from django.urls import reverse
 import datetime
+from datetime import date
+
 
 def index(request):
     return render(request, 'index.html')
@@ -18,14 +20,17 @@ def lista(request):
     produtos = Produto.objects.all()
     return render(request, 'lista.html', {'produtos':produtos})
 
-def remover(request, item): #recebe o id do item
+def remover(request, item, pag_saida=None): #recebe o id do item
     item_estoque = get_object_or_404(Estoque, id=item)
     produto = item_estoque.produto_id # Antes de apagar pega o ID do produto
+    operacao = item_estoque.situacao # pera a operacao de entrada ou saida
     item_estoque.delete()
     # volta para tela estoque_detalhe com lista atualizada
     estoque = Estoque.objects.filter(produto_id=produto)
-    return HttpResponseRedirect(reverse('estoque_detalhe', args=(produto,)), {'estoque':estoque})
+    if pag_saida == operacao:
+        return HttpResponseRedirect(reverse('estoque', args=(operacao,)), {'estoque':estoque})
 
+    return HttpResponseRedirect(reverse('estoque_detalhe', args=(produto,)), {'estoque':estoque})
 
 
 
@@ -103,4 +108,6 @@ def estoque(request, operacao=None):
 
         return HttpResponseRedirect(reverse('estoque', args=(operacao,)), {'operacao':operacao})
     else:
-        return render(request, 'estoque.html', {'produtos':produtos, 'operacao':operacao})
+        #date.__date= para formatar a buscar por um objeto datetime ao invez string
+        latest = Estoque.objects.filter(situacao=operacao, data__date=date.today()).order_by('-data')[:5]
+        return render(request, 'estoque.html', {'produtos':produtos, 'operacao':operacao, 'latest':latest})

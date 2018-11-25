@@ -9,42 +9,73 @@
   <style>
     table, th, td {border: 1px solid #000;}
     th, td {padding: 5px;}
+    .tudo { width: 99%; margin: 0 auto; }
+    .topo { background: #2a7d00; color:#fff; }
+    .esquerda { float: left; width: 55%; }
+    .direita { float: right; width: 45%;}
+    .rodape {color:#fff; clear:both;}
   </style>
 
   </head>
   <body>
+    <div class="tudo">
+      <div class="topo">
+        <h1> {{ operacao|upper }} DE PRODUTOS </h1>
+      </div> {# fecha topo #}
 
-    <h1> {{ operacao|upper }} DE PRODUTOS </h1>
-    <h2> {{ status }} </h2>
+      <div class="esquerda" align="left">
+        <form action="{% url 'estoque' operacao=operacao %}" method="post">
+        {% csrf_token %}
 
-    <form action="{% url 'estoque' operacao=operacao %}" method="post">
-    {% csrf_token %}
-    <fieldset>
-      <legend>{{ operacao|upper }} de Produto</legend>
-      <table>
-        <tr>
-          <th>Codigo</th>
-          <th>Produto</th>
-          <th>Quantidade</th>
-        </tr>
-      {% for item in produtos %}
-        <tr>
-          <td><input type="text" readonly size="5" maxlength="3" name="item" id="item{{ forloop.counter }}" value="{{item.id}}"></td>
-          <td><label for="item{{ forloop.counter }}">{{ item.item_text }}</label></td>
+          <h2>{{ operacao|upper }} de Produto </h2>
+          <table>
+            <tr>
+              <th>Codigo</th>
+              <th>Produto</th>
+              <th>Quantidade</th>
+            </tr>
+          {% for item in produtos %}
+            <tr>
+              <td><input type="text" readonly size="5" maxlength="3" name="item" id="item{{ forloop.counter }}" value="{{item.id}}"></td>
+              <td><label for="item{{ forloop.counter }}">{{ item.item_text }}</label></td>
+              <td><input type="number" min="0" max="50" name="f_qtd" id="item{{ forloop.counter }}" size="3" value="0" ></td>
+            </tr>
+          {% endfor %}
+          </table>
+          <br>
+          data: <input type="datetime-local" name="data" value="{% now "d/M/y" %}">
+          <input type="submit" value="inserir">
+          </form>
+      </div> {# fecha esquerda #}
 
-          <td><input type="number" min="0" max="50" name="f_qtd" id="item{{ forloop.counter }}" size="3" value="0" ></td>
-        </tr>
-      {% endfor %}
-      </table>
+      <div class="direita">
+        <h1>Ultimas {{operacao}}</h1>
+        <table>
+          <tr>
+            <td>Data</td>
+            <td>Produto</td>
+            <td>Qtd</td>
+            <td>Situacao</td>
+            <td></td>
+          </tr>
+          {% for latest_itens in latest  %}
+          <tr>
+            <td>{{latest_itens.data|date:"d M y"}}</td>
+            <td>{{latest_itens.produto}}</td>
+            <td>{{latest_itens.qtd}}</td>
+            <td>{{latest_itens.situacao}}</td>
+            <td> <a href="{% url 'remover' item=latest_itens.id pag_saida=operacao %}">remover</a> {{latest_itens.id}}</td>
 
-      <br>
-      data: <input type="datetime-local" name="data" value="{% now "d/M/y" %}">
+          </tr>
+          {% endfor %}
+        </table>
+      </div> {# fecha direira #}
 
-      <input type="submit" value="inserir">
-      </fieldset>
-      </form>
+      <div class="rodape">
+        <br>
+        <a href="{% url 'index' %}">VOLTAR MENU</a>
+      </div> {# fecha rodape #}
 
-    {{ mensagem }}
-    <a href="{% url 'index' %}">VOLTAR MENU</a>
+  </div> {# fecha tudo #}
   </body>
 </html>

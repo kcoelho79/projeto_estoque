@@ -48,7 +48,7 @@
     <td>{{ item.data|date:"d M y"}}</td>
     <td>{{ item.qtd }}</td>
     <td>{{ item.produto}}</td>
-    <td> <a href="{% url 'remover' item=item.id %}">remover</a> </td>
+    <td> <a href="{% url 'remover' item=item.id pag_saida='estoque_detalhe' %}">remover</a> </td>
   </tr>
   {% endfor %}
   <tr>
