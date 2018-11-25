@@ -18,6 +18,16 @@ def lista(request):
     produtos = Produto.objects.all()
     return render(request, 'lista.html', {'produtos':produtos})
 
+def remover(request, item): #recebe o id do item
+    item_estoque = get_object_or_404(Estoque, id=item)
+    produto = item_estoque.produto_id # Antes de apagar pega o ID do produto
+    item_estoque.delete()
+    # volta para tela estoque_detalhe com lista atualizada
+    estoque = Estoque.objects.filter(produto_id=produto)
+    return HttpResponseRedirect(reverse('estoque_detalhe', args=(produto,)), {'estoque':estoque})
+
+
+
 
 def estoque_detalhe(request, id_produto=None):
 

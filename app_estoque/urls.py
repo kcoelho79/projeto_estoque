@@ -12,5 +12,6 @@ urlpatterns = [
     path('lista_compra', views.lista_compra, name='lista_compra'),
     #/estoque/estoque_detalhe/id
     path('estoque_detalhe/<int:id_produto>/', views.estoque_detalhe, name='estoque_detalhe'),
+    path('remover/<int:item>/', views.remover, name='remover'),
 
 ]

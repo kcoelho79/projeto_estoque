@@ -41,12 +41,14 @@
     <td>Data</td>
     <td>Qtd</td>
     <td>Produto</td>
+    <td></td>
   </tr>
   {% for item in estoque %}
   <tr>
     <td>{{ item.data|date:"d M y"}}</td>
     <td>{{ item.qtd }}</td>
     <td>{{ item.produto}}</td>
+    <td> <a href="{% url 'remover' item=item.id %}">remover</a> </td>
   </tr>
   {% endfor %}
   <tr>
