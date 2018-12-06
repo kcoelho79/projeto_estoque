@@ -1,31 +1,38 @@
 <h1>Cadastro de Produto</h1>
 <h2>{{ mensagem }}</h2>
-<form class="" action="{% url 'cadastro' %}" method="post">
-{% csrf_token %}
 
 <style media="screen">
      th  {text-align: left; }
 </style>
+{% if edicao == "True" %}
+  <form class="" action="{% url 'cadastro_edicao' id_produto=produto.id %}" method="post">
+    <h2>MODO EDICAO HTML</h2>
+{% else %}
+  <form class="" action="{% url 'cadastro' %}" method="post">
+    <h2>MODO ADICIONAR HTML</h2>
+{% endif %}
+  {% csrf_token %}
+    <table>
+    <tr>
+      <th>Nome Produto:</th>
+      <th><input type="text" required="required" name="f_nome_produto" value="{{produto.item_text}}"></th>
+    </tr>
+    <tr>
+      <th>Descrição do produto:</th>
+      <th><input type="text" required="required" name="f_descricao_produto" value="{{produto.item_descricao}}"></th>
+    </tr>
+    <tr>
+      <th>Estoque mínimo:</th>
+      <th><input type="number" required="required" name="f_min_estoque" value="{{produto.min_estoque}}"></th>
+    </tr>
+    <tr>
+      <th>Total estoque:</th>
+      <th><input type="number" required="required" name="f_total_estoque" value="{{produto.total_estoque}}"></th>
+    </tr>
+    </table>
+    <br>
 
-<table>
-<tr>
-  <th>Nome Produto:</th>
-  <th><input type="text" required="required" name="nome_produto" value=""></th>
-</tr>
-<tr>
-  <th>Descrição do produto:</th>
-  <th><input type="text" required="required" name="descricao_produto" value=""></th>
-</tr>
-<tr>
-  <th>Estoque mínimo:</th>
-  <th><input type="number" required="required" name="min_estoque" value=""></th>
-</tr>
-<tr>
-  <th>Total estoque:</th>
-  <th><input type="number" required="required" name="total_estoque" value="0"></th>
-</tr>
-</table>
-<br>
-  <input type="submit" value="inserir"><br>
-  <a href="{% url 'index' %}">VOLTAR MENU INICIAL</a>
+    <input type="submit" value="gravar"><br>
 </form>
+
+<a href="{% url 'index' %}">VOLTAR MENU INICIAL</a>

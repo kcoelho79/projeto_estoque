@@ -9,10 +9,10 @@
     <th>Item de compra</th>
     <th>Quantidade</th>
   </tr>
-{% for produto in produtos %}
+{% for item in produtos %}
   <tr>
-    <th>{{ produto.item_text }}</th>
-    <th>{{produto.min_estoque|sub:produto.total_estoque}}</th>
+    <th>{{ item.item_text }}</th>
+    <th>{{ dic_produtos|dicKey1:item.item_text}}</th>
   </tr>
 {% endfor %}
 </table><br>

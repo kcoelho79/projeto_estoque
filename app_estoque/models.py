@@ -6,6 +6,7 @@ class Produto(models.Model):
     item_text = models.CharField(max_length=200, unique=True)
     item_descricao = models.TextField(blank=True )
     min_estoque = models.IntegerField(default=0)
+#  --- apagar total_estoque    
     total_estoque = models.IntegerField(default=0)
 
     def __str__(self):
@@ -25,19 +26,3 @@ class Estoque(models.Model):
 
     def __str__(self):
         return "%i %s de %s no estoque" %(self.qtd, self.situacao, self.produto.item_text)
-
-#class Entrada(models.Model):
-#    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-#    qtd = models.IntegerField(default=0)
-#    data_ent= models.DateTimeField(auto_now_add='True')
-
-#    def __str__(self):
-#        return "qtd %i - %s"  % (self.qtd,  self.produto.item_text)
-
-#class Saida(models.Model):
-#    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-#    qtd = models.IntegerField(default=0)
-#    data_sadia= models.DateTimeField(auto_now_add='True')
-
-#    def __str__(self):
-#        return "qtd %i - %s"  % (self.qtd,  self.produto.item_text)
