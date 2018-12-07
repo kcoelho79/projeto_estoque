@@ -7,9 +7,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app_estoque/style.css' %}">
   </head>
   <body>
-    <img src="{% static "app_estoque/example.jpg" %}" alt="My image"><br>
-    <h1>Escolha sua opção</h1>
-    <br>
+    <img src="{% static "app_estoque/logo.png" %}" alt="My image"><br>
+    <h2>Menu de Opções</h2>
     <table>
       <tr>
         <td><a href="{% url 'estoque' operacao="entrada" %}">Entrada</a></td>

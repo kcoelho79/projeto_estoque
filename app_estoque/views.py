@@ -32,11 +32,6 @@ def remover(request, item, pag_saida=None): #recebe o id do item
     produto = item_estoque.produto_id # Antes de apagar pega o ID do produto
     operacao = item_estoque.situacao # pera a operacao de entrada ou saida
     item_estoque.delete()
-    # --- apagar retira do total_estoque o quantidade da entrada ou saida do  item que foi removido
-    # --- apagar  produto_item_removido = Produto.objects.get(id=produto)
-    #  --- apagar produto_item_removido.total_estoque += qtd_item
-    # --- apagar produto_item_removido.save()
-    # --- apagar  volta para tela estoque_detalhe com lista atualizada
     estoque = Estoque.objects.filter(produto_id=produto)
     if pag_saida == operacao:
         return HttpResponseRedirect(reverse('estoque', args=(operacao,)), {'estoque':estoque})
@@ -45,9 +40,11 @@ def remover(request, item, pag_saida=None): #recebe o id do item
 
 def remover_produto(request, id_produto):
     produto_remover = Produto.objects.get(id=id_produto)
+    mensagem = "o produto %s foi removido" %(produto_remover.item_text)
     produto_remover.delete()
     produtos = Produto.objects.all()
-    return render(request, 'lista.html', {'produtos':produtos})
+    return render(request, 'alerta.html' , {'mensagem':mensagem})
+    #return render(request, 'lista.html', {'produtos':produtos})
 
 
 def estoque_detalhe(request, id_produto=None):
@@ -88,22 +85,21 @@ def cadastro(request, id_produto=None):
         Nome_produto = request.POST.get('f_nome_produto')
         Item_descricao = request.POST.get('f_descricao_produto')
         Min_estoque = request.POST.get('f_min_estoque')
-        Total_estoque = request.POST.get('f_total_estoque')
-        # verificar se o post e sobre cadastrar novo prodtuo ou alterar produto
+        # verifica se o post e sobre cadastrar novo prodtuo ou alterar produto
         if id_produto:
             mensagem="produto ALTERADO com sucesso"
             edicao="True"
-            Produto.objects.filter(id=id_produto).update(item_text=Nome_produto,item_descricao=Item_descricao,min_estoque=Min_estoque,total_estoque=Total_estoque)
+            Produto.objects.filter(id=id_produto).update(item_text=Nome_produto,item_descricao=Item_descricao,min_estoque=Min_estoque)
             produto_edicao = Produto.objects.get(id=id_produto)
 
         else:
             mensagem="produto CADASTRADO com sucesso"
             edicao="False"
-            produto = Produto(item_text=Nome_produto,item_descricao=Item_descricao,min_estoque=Min_estoque,total_estoque=Total_estoque)
+            produto = Produto(item_text=Nome_produto,item_descricao=Item_descricao,min_estoque=Min_estoque)
             produto.save()
             produto_edicao= None
 
-    else: # nao e moetodo POST
+    else: # nao e o metodo POST
         if id_produto:
             mensagem="Modo edicao"
             edicao="True"
@@ -136,7 +132,6 @@ def estoque(request, operacao=None):
                     lqtd[pos] = -1 * int(lqtd[pos])
                 produto = Produto.objects.get(id=litens[pos])
                 produto.estoque_set.create(qtd=(lqtd[pos]),situacao=operacao)
-    #  --- apagar             produto.total_estoque= produto.total_estoque + int(lqtd[pos])
                 produto.save()
             else:
                 continue

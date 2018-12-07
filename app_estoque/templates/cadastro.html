@@ -5,11 +5,12 @@
      th  {text-align: left; }
 </style>
 {% if edicao == "True" %}
+{# MODO EDICAO HTML #}
   <form class="" action="{% url 'cadastro_edicao' id_produto=produto.id %}" method="post">
-    <h2>MODO EDICAO HTML</h2>
+  <a href="{% url 'remover_produto' id_produto=produto.id %}">REMOVER ?</a>
 {% else %}
+{# MODO ADICIONAR HTML #}
   <form class="" action="{% url 'cadastro' %}" method="post">
-    <h2>MODO ADICIONAR HTML</h2>
 {% endif %}
   {% csrf_token %}
     <table>
@@ -19,20 +20,20 @@
     </tr>
     <tr>
       <th>Descrição do produto:</th>
-      <th><input type="text" required="required" name="f_descricao_produto" value="{{produto.item_descricao}}"></th>
+      <th><textarea name="f_descricao_produto" rows="6" cols="18"></textarea></th>
     </tr>
     <tr>
       <th>Estoque mínimo:</th>
       <th><input type="number" required="required" name="f_min_estoque" value="{{produto.min_estoque}}"></th>
     </tr>
-    <tr>
-      <th>Total estoque:</th>
-      <th><input type="number" required="required" name="f_total_estoque" value="{{produto.total_estoque}}"></th>
-    </tr>
     </table>
     <br>
-
+  {% if edicao == "True" %}
+    <input type="submit" value="salvar"><br>
+  {% else %}
+    <input type="reset" name="" value="cancelar">
     <input type="submit" value="gravar"><br>
+  {% endif %}
 </form>
 
 <a href="{% url 'index' %}">VOLTAR MENU INICIAL</a>

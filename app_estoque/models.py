@@ -6,8 +6,7 @@ class Produto(models.Model):
     item_text = models.CharField(max_length=200, unique=True)
     item_descricao = models.TextField(blank=True )
     min_estoque = models.IntegerField(default=0)
-#  --- apagar total_estoque    
-    total_estoque = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.item_text
