@@ -24,4 +24,4 @@ class Estoque(models.Model):
     qtd = models.IntegerField(default=0)
 
     def __str__(self):
-        return "%i %s de %s no estoque" %(self.qtd, self.situacao, self.produto.item_text)
+        return "%s qtd %i de %s" %(self.data, self.qtd, self.produto.item_text)

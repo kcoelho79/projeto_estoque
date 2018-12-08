@@ -40,11 +40,11 @@ def remover(request, item, pag_saida=None): #recebe o id do item
 
 def remover_produto(request, id_produto):
     produto_remover = Produto.objects.get(id=id_produto)
-    mensagem = "o produto %s foi removido" %(produto_remover.item_text)
+    #mensagem = "o produto %s foi removido" %(produto_remover.item_text)
     produto_remover.delete()
     produtos = Produto.objects.all()
-    return render(request, 'alerta.html' , {'mensagem':mensagem})
-    #return render(request, 'lista.html', {'produtos':produtos})
+    return HttpResponseRedirect(reverse('lista'))
+    #return render(request, 'alerta.html' , {'mensagem':mensagem})
 
 
 def estoque_detalhe(request, id_produto=None):
@@ -58,13 +58,14 @@ def estoque_detalhe(request, id_produto=None):
         if data_inicial:
             ano_ini,mes_ini,dia_ini = data_inicial.split(',')
             data_inicial_limpa= datetime.date(int(ano_ini),int(mes_ini),int(dia_ini))
-            estoque = get_list_or_404(Estoque, produto__id=int(item), data__date=data_inicial_limpa)
-
+            #estoque = get_list_or_404(Estoque, produto__id=int(item), data__date=data_inicial_limpa)
+            estoque = Estoque.objects.filter(produto__id=int(item)).filter(data__date__gte=data_inicial_limpa)
             # se data inicial e final recebeu data nao vazio
             if data_final:
                 ano_final,mes_final,dia_final = data_final.split(',')
                 data_final_limpa= datetime.date(int(ano_final),int(mes_final),int(dia_final))
-                estoque = get_list_or_404(Estoque, produto__id=int(item), data__date__range=(data_inicial_limpa, data_final_limpa))
+                estoque = Estoque.objects.filter(produto__id=int(item)).filter(data__date__range=(data_inicial_limpa, data_final_limpa))
+
         # filtro data esta vazio
         else:
             estoque = get_list_or_404(Estoque, produto__id=int(item))
