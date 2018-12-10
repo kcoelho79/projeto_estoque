@@ -59,6 +59,7 @@ def estoque_detalhe(request, id_produto=None):
             ano_ini,mes_ini,dia_ini = data_inicial.split(',')
             data_inicial_limpa= datetime.date(int(ano_ini),int(mes_ini),int(dia_ini))
             #estoque = get_list_or_404(Estoque, produto__id=int(item), data__date=data_inicial_limpa)
+            # gte= maior ou igual
             estoque = Estoque.objects.filter(produto__id=int(item)).filter(data__date__gte=data_inicial_limpa)
             # se data inicial e final recebeu data nao vazio
             if data_final:

@@ -1,39 +1,40 @@
-<h1>Cadastro de Produto</h1>
-<h2>{{ mensagem }}</h2>
+{% extends "base.html" %}
 
-<style media="screen">
-     th  {text-align: left; }
-</style>
-{% if edicao == "True" %}
-{# MODO EDICAO HTML #}
-  <form class="" action="{% url 'cadastro_edicao' id_produto=produto.id %}" method="post">
-  <a href="{% url 'remover_produto' id_produto=produto.id %}">REMOVER ?</a>
-{% else %}
-{# MODO ADICIONAR HTML #}
-  <form class="" action="{% url 'cadastro' %}" method="post">
-{% endif %}
-  {% csrf_token %}
-    <table>
-    <tr>
-      <th>Nome Produto:</th>
-      <th><input type="text" required="required" name="f_nome_produto" value="{{produto.item_text}}"></th>
-    </tr>
-    <tr>
-      <th>Descrição do produto:</th>
-      <th><textarea name="f_descricao_produto" rows="6" cols="18"></textarea></th>
-    </tr>
-    <tr>
-      <th>Estoque mínimo:</th>
-      <th><input type="number" required="required" name="f_min_estoque" value="{{produto.min_estoque}}"></th>
-    </tr>
-    </table>
-    <br>
-  {% if edicao == "True" %}
-    <input type="submit" value="salvar"><br>
-  {% else %}
-    <input type="reset" name="" value="cancelar">
-    <input type="submit" value="gravar"><br>
-  {% endif %}
-</form>
+{% block alerta %}
+  {{ mensagem }}
+{% endblock %}
 
-<a href="{% url 'index' %}">VOLTAR MENU INICIAL</a>
+{% block col-esquerda %}
+    {% if edicao == "True" %}
+    {# MODO EDICAO HTML #}
+      <form class="" action="{% url 'cadastro_edicao' id_produto=produto.id %}" method="post">
+      <a href="{% url 'remover_produto' id_produto=produto.id %}">REMOVER ?</a>
+    {% else %}
+    {# MODO ADICIONAR HTML #}
+      <form class="" action="{% url 'cadastro' %}" method="post">
+    {% endif %}
+      {% csrf_token %}
+        <table>
+        <tr>
+          <th>Nome Produto:</th>
+          <th><input type="text" required="required" name="f_nome_produto" value="{{produto.item_text}}"></th>
+        </tr>
+        <tr>
+          <th>Descrição do produto:</th>
+          <th><textarea name="f_descricao_produto" rows="6" cols="18"></textarea></th>
+        </tr>
+        <tr>
+          <th>Estoque mínimo:</th>
+          <th><input type="number" required="required" name="f_min_estoque" value="{{produto.min_estoque}}"></th>
+        </tr>
+        </table>
+        <br>
+      {% if edicao == "True" %}
+        <input type="submit" value="salvar"><br>
+      {% else %}
+        <input type="reset" name="" value="cancelar">
+        <input type="submit" value="gravar"><br>
+      {% endif %}
+    </form>
+
+{% endblock %}

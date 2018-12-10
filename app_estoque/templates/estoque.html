@@ -1,81 +1,62 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>{{ operacao }} de Produto</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'app_estoque/style.css' %}">
+{% extends "base.html" %}
 
-  <style>
-    table, th, td {border: 1px solid #000;}
-    th, td {padding: 5px;}
-    .tudo { width: 99%; margin: 0 auto; }
-    .topo { background: #2a7d00; color:#fff; }
-    .esquerda { float: left; width: 55%; }
-    .direita { float: right; width: 45%;}
-    .rodape {color:#fff; clear:both;}
-  </style>
+{% block alerta %}
+    {{ operacao}} de produtos
 
-  </head>
-  <body>
-    <div class="tudo">
-      <div class="topo">
-        <h1> {{ operacao|upper }} DE PRODUTOS </h1>
-      </div> {# fecha topo #}
+{% endblock %}
 
-      <div class="esquerda" align="left">
-        <form action="{% url 'estoque' operacao=operacao %}" method="post">
-        {% csrf_token %}
+{% block col-esquerda%}
+  <form action="{% url 'estoque' operacao=operacao %}" method="post">
+  {% csrf_token %}
 
-          <h2>{{ operacao|upper }} de Produto </h2>
-          <table>
-            <tr>
-              <th>Codigo</th>
-              <th>Produto</th>
-              <th>Quantidade</th>
-            </tr>
-          {% for item in produtos %}
-            <tr>
-              <td><input type="text" readonly size="5" maxlength="3" name="item" id="item{{ forloop.counter }}" value="{{item.id}}"></td>
-              <td><label for="item{{ forloop.counter }}">{{ item.item_text }}</label></td>
-              <td><input type="number" min="0" max="50" name="f_qtd" id="item{{ forloop.counter }}" size="3" value="0" ></td>
-            </tr>
-          {% endfor %}
-          </table>
-          <br>
-          data: <input type="datetime-local" name="data" value="{% now "d/M/y" %}">
-          <input type="submit" value="inserir">
-          </form>
-      </div> {# fecha esquerda #}
+    <h3>{{ operacao|upper }} de Produto </h3>
+    <table class="table table-bordered" >
+      <thead>
+        <tr>
+          <th scope="col">Codigo</th>
+          <th scope="col">Produto</th>
+          <th scope="col">Quantidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in produtos %}
+        <tr>
+          <th scope="row"><input type="text" readonly size="5" maxlength="3" name="item" id="item{{ forloop.counter }}" value="{{item.id}}"></td>
+          <td><label for="item{{ forloop.counter }}">{{ item.item_text }}</label></td>
+          <td><input type="number" min="0" max="50" name="f_qtd" id="item{{ forloop.counter }}" size="3" value="0" ></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br>
+    data: <input type="datetime-local" name="data" value="{% now "d/M/y" %}">
+    <input type="submit" value="inserir">
+    </form>
 
-      <div class="direita">
-        <h1>Ultimas {{operacao}}</h1>
-        <table>
-          <tr>
-            <td>Data</td>
-            <td>Produto</td>
-            <td>Qtd</td>
-            <td>Situacao</td>
-            <td></td>
-          </tr>
-          {% for latest_itens in latest  %}
-          <tr>
-            <td>{{latest_itens.data|date:"d M y"}}</td>
-            <td>{{latest_itens.produto}}</td>
-            <td>{{latest_itens.qtd}}</td>
-            <td>{{latest_itens.situacao}}</td>
-            <td> <a href="{% url 'remover' item=latest_itens.id pag_saida=operacao %}">remover</a> {{latest_itens.id}}</td>
+{% endblock %}
 
-          </tr>
-          {% endfor %}
-        </table>
-      </div> {# fecha direira #}
-
-      <div class="rodape">
-        <br>
-        <a href="{% url 'index' %}">VOLTAR MENU</a>
-      </div> {# fecha rodape #}
-
-  </div> {# fecha tudo #}
-  </body>
-</html>
+{% block col-direita %}
+    <h3>Ultimas {{operacao}}</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Data</td>
+          <th scope="col">Produto</td>
+          <th scope="col">Qtd</td>
+          <th scope="col">Situacao</td>
+          <th scope="col"></td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for latest_itens in latest  %}
+        <tr>
+          <td>{{latest_itens.data|date:"d M y"}}</td>
+          <td>{{latest_itens.produto}}</td>
+          <td>{{latest_itens.qtd}}</td>
+          <td>{{latest_itens.situacao}}</td>
+          <td> <a href="{% url 'remover' item=latest_itens.id pag_saida=operacao %}">remover</a> {{latest_itens.id}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock %}

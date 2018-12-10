@@ -1,20 +1,19 @@
-<style media="screen">
-  table, th, td {border: 1px solid #000;}
-  th, td {padding: 5px;}
-</style>
-<h1>Lista de Compra de Produtos</h1>
-{% load mathfilters %}
-<table>
-  <tr>
-    <th>Item de compra</th>
-    <th>Quantidade</th>
-  </tr>
-{% for item in produtos %}
-  <tr>
-    <th>{{ item.item_text }}</th>
-    <th>{{ dic_produtos|dicKey1:item.item_text}}</th>
-  </tr>
-{% endfor %}
-</table><br>
+{% extends "base.html" %}
 
-<a href="{% url 'index' %}">VOLTAR MENU</a>
+
+{% block alerta %}
+  Lista de Compra de Produtos
+{% endblock %}
+
+{% block col-esquerda %}
+
+    {% for item in produtos %}
+    <ul class="list-group">
+      <li class="list-group-item">{{ dic_produtos|dicKey1:item.item_text}} - {{item.item_text}}</li>
+    </ul>
+    {% endfor %}
+{% endblock %}
+
+{% block col-direita %}
+<h2>Imprimir</h2>
+{% endblock %}

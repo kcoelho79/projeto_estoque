@@ -1,36 +1,16 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Controle de Estoque</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'app_estoque/style.css' %}">
-  </head>
-  <body>
-    <img src="{% static "app_estoque/logo.png" %}" alt="My image"><br>
-    <h2>Menu de Opções</h2>
-    <table>
-      <tr>
-        <td><a href="{% url 'estoque' operacao="entrada" %}">Entrada</a></td>
-        <td>Recebimento de Mercadoria</td>
-      </tr>
-      <tr>
-        <td><a href="{% url 'estoque' operacao="saida" %}">Saida</a></td>
-        <td>Saida de mercadoria</td>
-      </tr>
-      <tr>
-        <td><a href="{% url 'lista' %}">Estoque</a></td>
-        <td>Situação do estoque</td>
-      </tr>
-      <tr>
-        <td><a href="{% url 'cadastro' %}">Cadastro</a></td>
-        <td>Cadastro de Produto</td>
-      </tr>
-      <tr>
-        <td><a href="{% url 'lista_compra' compra="True" %}">Lista</a></td>
-        <td>Lista para Compra</td>
-      </tr>
-    </table>
-    <br>
-  </body>
-</html>
+{% block alerta %}
+{% endblock %}
+{% block cabecalho %}
+<div class="jumbotron">
+  <div class="container">
+    <div class="media">
+      <img src="{% static "app_estoque/logo.png" %}" class="rounded float-left" alt="..."><br>
+    </div>
+    <h1 class="display-3">Controle de Estoque</h1>
+    <p>Sistema para gestão de entrada e saida de produto copa e limpeza do estoque</p>
+    <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+  </div>
+</div>
+{% endblock %}
