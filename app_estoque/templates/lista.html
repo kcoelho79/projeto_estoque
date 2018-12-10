@@ -3,37 +3,38 @@
 {% block alerta %}Lista do Estoque{% endblock %}
 
 {% block col-esquerda %}
-<p><a class="btn btn-secondary" href="{% url 'lista_compra' compra="True" %}" role="button">Lista de Compras&raquo;</a></p>
+<p><a class="btn btn-primary" href="{% url 'lista_compra' compra="True" %}" role="button">Lista de Compras&raquo;</a></p>
 
   <table class="table">
+
+
+
     <thead>
-    <tr>
-      <th colspan="2" align="center">PRODUTOS</th>
-      <th colspan="3" align="center">ESTOQUE</th>
-    </tr>
-    </thead>
-    <tbody>
     <tr>
       <th>Codigo</th>
       <th>Nome</th>
       <th>Atual</th>
       <th>mínimo</th>
       <th>comprar</th>
-
+      <th></th>
+      <th></th>
     </tr>
-  {% for item in produtos %}
+    </thead>
+    <tbody>
+
+    {% for item in produtos %}
     <tr>
       <td align="center"><a href="{% url 'cadastro_edicao' id_produto=item.id %}">{{ item.id }}</a></td>
       <td>{{ item.item_text |upper }}</td>
       <td align="center">{{ dic_produtos|dicKey:item.item_text}}</td>
       <td align="center">{{ item.min_estoque }} </td>
       <td align="center">{{ dic_produtos|dicKey1:item.item_text}} </td>
-      <td><a href="{%url 'estoque_detalhe' id_produto=item.id %}">historico</a></td>
-      <td><a href="{% url 'remover_produto' id_produto=item.id %}">Deletar</a></td>
+      <td><a class="btn btn-primary" href="{% url 'estoque_detalhe' id_produto=item.id %}" role="button">Historico</a></td>
+      <td><a class="btn btn-danger"  href="{% url 'remover_produto' id_produto=item.id %}" role="button">Remover</a></td>
     </tr>
 
-  {% endfor %}
-  </tbody>
+    {% endfor %}
+    </tbody>
   </table>
 {% endblock %}
 
