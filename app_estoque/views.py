@@ -45,7 +45,7 @@ def remover_produto(request, id_produto):
     produtos = Produto.objects.all()
     return HttpResponseRedirect(reverse('lista'))
     #return render(request, 'alerta.html' , {'mensagem':mensagem})
-
+ 
 
 def estoque_detalhe(request, id_produto=None):
 
@@ -56,14 +56,14 @@ def estoque_detalhe(request, id_produto=None):
         data_final = request.POST.get('f_data_final')
         # iniciar validacao dos campos de filtro data
         if data_inicial:
-            ano_ini,mes_ini,dia_ini = data_inicial.split(',')
+            dia_ini,mes_ini,ano_ini = data_inicial.split('/')
             data_inicial_limpa= datetime.date(int(ano_ini),int(mes_ini),int(dia_ini))
             #estoque = get_list_or_404(Estoque, produto__id=int(item), data__date=data_inicial_limpa)
             # gte= maior ou igual
             estoque = Estoque.objects.filter(produto__id=int(item)).filter(data__date__gte=data_inicial_limpa)
             # se data inicial e final recebeu data nao vazio
             if data_final:
-                ano_final,mes_final,dia_final = data_final.split(',')
+                dia_final,mes_final,ano_final = data_final.split('/')
                 data_final_limpa= datetime.date(int(ano_final),int(mes_final),int(dia_final))
                 estoque = Estoque.objects.filter(produto__id=int(item)).filter(data__date__range=(data_inicial_limpa, data_final_limpa))
 
@@ -120,6 +120,7 @@ def estoque(request, operacao=None):
     if request.method == 'POST':
         lqtd = request.POST.getlist('f_qtd')
         litens = request.POST.getlist('item')
+        ldata = request.POST.get('data')
 
     # pega o tamanho da interaçao (qtos itens teve atualizacao no estoque)
     # para gerar loop e gravar as atualizacoes no baco
@@ -133,7 +134,7 @@ def estoque(request, operacao=None):
                 if operacao =="saida":
                     lqtd[pos] = -1 * int(lqtd[pos])
                 produto = Produto.objects.get(id=litens[pos])
-                produto.estoque_set.create(qtd=(lqtd[pos]),situacao=operacao)
+                produto.estoque_set.create(qtd=(lqtd[pos]),situacao=operacao,data=ldata)
                 produto.save()
             else:
                 continue
@@ -141,5 +142,5 @@ def estoque(request, operacao=None):
         return HttpResponseRedirect(reverse('estoque', args=(operacao,)), {'operacao':operacao})
     else:
         #date.__date= para formatar a buscar por um objeto datetime ao invez string
-        latest = Estoque.objects.filter(situacao=operacao, data__date=date.today()).order_by('-data')[:5]
+        latest = Estoque.objects.filter(situacao=operacao, data_timestamp__date=date.today()).order_by('-data')[:5]
         return render(request, 'estoque.html', {'produtos':produtos, 'operacao':operacao, 'latest':latest})

@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 
 class Produto(models.Model):
     data_cad = models.DateTimeField(auto_now_add='True')
@@ -18,7 +18,8 @@ class Estoque(models.Model):
         ('Saida', 'saida'),
     )
 
-    data = models.DateTimeField(auto_now_add='True')
+    data_timestamp = models.DateTimeField(auto_now_add='True')
+    data = models.DateTimeField(default=timezone.now)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     situacao = models.CharField(max_length=7, choices=SITUACAO)
     qtd = models.IntegerField(default=0)

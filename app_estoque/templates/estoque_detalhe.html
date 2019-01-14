@@ -8,29 +8,30 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Movimentacao de estoque</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
+  <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-  $( function() {
-    $( "#datepicker" ).datepicker({dateFormat: "yy,mm,dd"} );
-    $( "#datepicker2" ).datepicker({dateFormat: "yy,mm,dd"} );
-  } );
-  </script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+  
+
 
 {% block alerta %}
     Historico de entrada e saida por item no estoque
 {% endblock %}
 
 {% block col-esquerda %}
+
+
 <form class="" action="" method="POST">
   {% csrf_token %}
 
-  codigo <input type="text" required="yes" size="4" maxlength="3" name="f_item" value="">
-  data inicial: <input type="text" id="datepicker" name="f_data_inicial" value="">
-  data final:   <input type="text" id="datepicker2" name="f_data_final"   value="">
+  codigo <input type="text" required="yes" size="4" maxlength="3" name="f_item" value=""> 
+  data inicial: <input type="text" autocomplete="off" id="datepicker_inicial" name="f_data_inicial" value="">
+  data final:   <input type="text" autocomplete="off" id="datepicker_final" name="f_data_final"   value="">
   <input type="submit" name="" value="Pesquisar">
+
+  
 </form><br>
 <table>
   <tr>
