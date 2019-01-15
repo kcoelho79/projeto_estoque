@@ -72,7 +72,11 @@ def estoque_detalhe(request, id_produto=None):
             estoque = get_list_or_404(Estoque, produto__id=int(item))
 
     else:
-        estoque = get_list_or_404(Estoque, produto__id=id_produto)
+        if id_produto == 0: 
+            estoque = Estoque.objects.all()
+        else: 
+            estoque = get_list_or_404(Estoque, produto__id=id_produto)
+        
     # usando o sum para somar uma lista de valores que recebe do obj estoque
     total = sum([ i.qtd for i in estoque])
     # variavel TOTAL resultado da soma de todos ent e saida do produto

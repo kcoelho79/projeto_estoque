@@ -29,8 +29,8 @@
       <td align="center">{{ dic_produtos|dicKey:item.item_text}}</td>
       <td align="center">{{ item.min_estoque }} </td>
       <td align="center">{{ dic_produtos|dicKey1:item.item_text}} </td>
-      <td><a class="btn btn-primary" href="{% url 'estoque_detalhe' id_produto=item.id %}" role="button">Historico</a></td>
-      <td><a class="btn btn-danger"  href="{% url 'remover_produto' id_produto=item.id %}" role="button">Remover</a></td>
+      <td><a class="btn btn-primary btn-sm" href="{% url 'estoque_detalhe' id_produto=item.id %}" role="button">Historico</a></td>
+      <td><a href="{% url 'remover_produto' id_produto=item.id %}" class="btn btn-link btn-sm"  role="button">Remover</a></td>
     </tr>
 
     {% endfor %}
