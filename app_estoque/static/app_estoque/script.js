@@ -1,16 +1,6 @@
 $( function() {
 
 
-    // document.getElementById("movimentacao").onclick =  function () {
-    //     alert("apertou botao de movimentacao")
-    //     console.log("teste")
-
-    // }
-
-    $("#movimentacao").click( function () {
-        alert("jquery esta funconado")
-    })
-
 
     // funcao retornar data hoje (now)
     

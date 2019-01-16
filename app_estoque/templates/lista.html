@@ -4,20 +4,18 @@
 
 {% block col-esquerda %}
 <p><a class="btn btn-primary" href="{% url 'lista_compra' compra="True" %}" role="button">Lista de Compras&raquo;</a></p>
-
+<div class="table-responsive-sm">
   <table class="table">
-
-
 
     <thead>
     <tr>
-      <th>Codigo</th>
-      <th>Nome</th>
-      <th>Atual</th>
-      <th>mínimo</th>
-      <th>comprar</th>
-      <th></th>
-      <th></th>
+      <th scope="col">Codigo</th>
+      <th scope="col">Nome</th>
+      <th scope="col">Atual</th>
+      <th scope="col">mínimo</th>
+      <th scope="col">comprar</th>
+      <th scope="col"> </th>
+      <th scope="col"> </th>
     </tr>
     </thead>
     <tbody>
@@ -30,12 +28,13 @@
       <td align="center">{{ item.min_estoque }} </td>
       <td align="center">{{ dic_produtos|dicKey1:item.item_text}} </td>
       <td><a class="btn btn-primary btn-sm" href="{% url 'estoque_detalhe' id_produto=item.id %}" role="button">Historico</a></td>
-      <td><a href="{% url 'remover_produto' id_produto=item.id %}" class="btn btn-link btn-sm"  role="button">Remover</a></td>
+      <td><a class="btn btn-danger btn-sm"  href="{% url 'remover_produto' id_produto=item.id %}"  role="button">Remover</a></td>
     </tr>
 
     {% endfor %}
     </tbody>
   </table>
 {% endblock %}
+</div>
 
 {% block col-direita %}{% endblock %}

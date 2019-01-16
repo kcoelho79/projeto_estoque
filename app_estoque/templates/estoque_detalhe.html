@@ -26,31 +26,38 @@
 <form class="" action="" method="POST">
   {% csrf_token %}
 
-  codigo <input type="text" required="yes" size="4" maxlength="3" name="f_item" value=""> 
-  data inicial: <input type="text" autocomplete="off" id="datepicker_inicial" name="f_data_inicial" value="">
-  data final:   <input type="text" autocomplete="off" id="datepicker_final" name="f_data_final"   value="">
+  codigo <input type="text" required="yes" size="4" maxlength="3" name="f_item" value=""> <br>
+  data inicial: <input type="text" maxlength="10" autocomplete="off" id="datepicker_inicial" name="f_data_inicial" value=""><br>
+  data   final: <input type="text" maxlength="10" autocomplete="off" id="datepicker_final" name="f_data_final"   value="">
   <input type="submit" name="" value="Pesquisar">
 
   
 </form><br>
-<table>
-  <tr>
-    <td>Data</td>
-    <td>Qtd</td>
-    <td>Produto</td>
-    <td></td>
-  </tr>
-  {% for item in estoque %}
-  <tr>
-    <td>{{ item.data|date:"d M y"}}</td>
-    <td>{{ item.qtd }}</td>
-    <td>{{ item.produto}}</td>
-    <td> <a href="{% url 'remover' item=item.id pag_saida='estoque_detalhe' %}">remover</a> </td>
-  </tr>
-  {% endfor %}
-  <tr>
-    <td>Total</td>
-    <td colspan="2">{{total}}</td>
-  </tr>
-</table>
+<div class="table-responsive-sm">
+  <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Data</th>
+      <th scope="col" align="left">Qtd</th>
+      <th scope="col" >Produto</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for item in estoque %}
+    <tr>
+      <td>{{ item.data|date:"d M y"}}</td>
+      <td>{{ item.qtd }}</td>
+      <td>{{ item.produto}}</td>
+      <td> <a class="btn btn-danger btn-sm" href="{% url 'remover' item=item.id pag_saida='estoque_detalhe' %}">remover</a> </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+    <tr>
+      <td>Total</td>
+      <td colspan="2">{{total}}</td>
+    </tr>
+  </table>
+</div>
 {% endblock %}
