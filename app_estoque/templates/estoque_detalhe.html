@@ -1,21 +1,7 @@
 <!doctype html>
 {% extends "base.html" %}
 
-<style media="screen">
-  table, th, td {border: 1px solid #000;}
-  th, td {padding: 5px;}
-</style>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Movimentacao de estoque</title>
   
-  <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-  
-
-
 {% block alerta %}
     Historico de entrada e saida por item no estoque
 {% endblock %}
@@ -23,14 +9,20 @@
 {% block col-esquerda %}
 
 
+
 <form class="" action="" method="POST">
   {% csrf_token %}
 
-  codigo <input type="text" required="yes" size="4" maxlength="3" name="f_item" value=""> <br>
+<select name="f_item" id="select_cod">
+  {% for produto in produtos %}
+    <option name="f_item" value={{produto.id}}>{{produto.item_text}}</option>
+  {% endfor %}
+</select>
+<br>
   data inicial: <input type="text" maxlength="10" autocomplete="off" id="datepicker_inicial" name="f_data_inicial" value=""><br>
-  data   final: <input type="text" maxlength="10" autocomplete="off" id="datepicker_final" name="f_data_final"   value="">
-  <input type="submit" name="" value="Pesquisar">
-
+  data   final  : <input type="text" maxlength="10" autocomplete="off" id="datepicker_final" name="f_data_final"   value="">
+  <input type="submit" name="" value="Pesquisar"><br>
+<a href="{% url 'estoque_detalhe' id_produto=0 %}">Listar todos registros </a>
   
 </form><br>
 <div class="table-responsive-sm">
@@ -49,7 +41,7 @@
     <tr>
       <td>{{ item.data|date:"d M y"}}</td>
       <td>{{ item.qtd }}</td>
-      <td>{{ item.produto}}</td>
+      <td id="th_produto" >{{ item.produto}}</td>
       <td> <a class="btn btn-danger btn-sm" href="{% url 'remover' item=item.id pag_saida='estoque_detalhe' %}">remover</a> </td>
     </tr>
     {% endfor %}
@@ -59,5 +51,19 @@
       <td colspan="2">{{total}}</td>
     </tr>
   </table>
+
 </div>
+
+<script>
+    console.log(document.getElementById("th_produto").innerHTML)
+
+    if (! document.getElementById("th_produto").innerHTML){
+      alert("NAO TEM NADA EM ESTOQUE")
+    } 
+    
+</script>
+
+
 {% endblock %}
+
+

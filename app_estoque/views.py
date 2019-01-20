@@ -75,13 +75,14 @@ def estoque_detalhe(request, id_produto=None):
         if id_produto == 0: 
             estoque = Estoque.objects.all()
         else: 
-            estoque = get_list_or_404(Estoque, produto__id=id_produto)
+            estoque = Estoque.objects.filter(produto__id=id_produto)
         
     # usando o sum para somar uma lista de valores que recebe do obj estoque
     total = sum([ i.qtd for i in estoque])
     # variavel TOTAL resultado da soma de todos ent e saida do produto
     # Sum (biblioteca) faz a Soma e retorar um DIC campo__sum
-    return render(request, 'estoque_detalhe.html', {'estoque':estoque, 'total':total})
+    produtos = Produto.objects.all() # levar todos os itens de produto, para preencher o select box codigo
+    return render(request, 'estoque_detalhe.html', {'estoque':estoque, 'total':total, 'produtos':produtos})
 
 
 def cadastro(request, id_produto=None):
