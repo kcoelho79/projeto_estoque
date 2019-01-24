@@ -1,16 +1,23 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.db.models import Q, Sum
 from .forms import EntradaForm
 from .models import Produto,Estoque
 from django.urls import reverse
 import datetime
 from datetime import date
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def index(request):
-    return render(request, 'index.html')
+    count = User.objects.count()
+    return render(request, 'index.html', {
+        'count': count
+    })
 
+@login_required
 def lista(request, compra=None):
     produtos = Produto.objects.all()
     dic_produtos = {}
@@ -25,7 +32,7 @@ def lista(request, compra=None):
         return render(request, 'lista_compra.html', {'dic_produtos':dic_produtos, 'produtos':produtos})
     return render(request, 'lista.html', {'dic_produtos':dic_produtos, 'produtos':produtos})
 
-
+@login_required
 def remover(request, item, pag_saida=None): #recebe o id do item
     item_estoque = get_object_or_404(Estoque, id=item)
     qtd_item= item_estoque.qtd
@@ -38,6 +45,7 @@ def remover(request, item, pag_saida=None): #recebe o id do item
 
     return HttpResponseRedirect(reverse('estoque_detalhe', args=(produto,)), {'estoque':estoque})
 
+@login_required
 def remover_produto(request, id_produto):
     produto_remover = Produto.objects.get(id=id_produto)
     #mensagem = "o produto %s foi removido" %(produto_remover.item_text)
@@ -46,7 +54,7 @@ def remover_produto(request, id_produto):
     return HttpResponseRedirect(reverse('lista'))
     #return render(request, 'alerta.html' , {'mensagem':mensagem})
  
-
+@login_required
 def estoque_detalhe(request, id_produto=None):
 
     if request.method == 'POST':
@@ -84,7 +92,7 @@ def estoque_detalhe(request, id_produto=None):
     produtos = Produto.objects.all() # levar todos os itens de produto, para preencher o select box codigo
     return render(request, 'estoque_detalhe.html', {'estoque':estoque, 'total':total, 'produtos':produtos})
 
-
+@login_required
 def cadastro(request, id_produto=None):
     mensagem=""
 
@@ -119,6 +127,7 @@ def cadastro(request, id_produto=None):
 
     return render(request, 'cadastro.html', {'produto':produto_edicao, 'edicao':edicao, 'mensagem':mensagem})
 
+@login_required
 def estoque(request, operacao=None):
     # operacao = operacao de entrada (soma) ou saida (subtrai) do estoque
     produtos = Produto.objects.all()
@@ -149,3 +158,18 @@ def estoque(request, operacao=None):
         #date.__date= para formatar a buscar por um objeto datetime ao invez string
         latest = Estoque.objects.filter(situacao=operacao, data_timestamp__date=date.today()).order_by('-data')[:5]
         return render(request, 'estoque.html', {'produtos':produtos, 'operacao':operacao, 'latest':latest})
+
+
+def signup(request):
+    # usando function form 
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/signup.html', {
+        'form': form
+    })
+

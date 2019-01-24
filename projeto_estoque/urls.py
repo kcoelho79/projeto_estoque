@@ -37,4 +37,7 @@ urlpatterns = [
     path('remover/<int:item>/<pag_saida>', views.remover, name='remover'),
     path('remover_produto/<int:id_produto>/', views.remover_produto, name='remover_produto'),
     path('admin/', admin.site.urls),
+    path('signup/', views.signup, name='signup'),
+    path('accounts/', include('django.contrib.auth.urls')),
+
 ]

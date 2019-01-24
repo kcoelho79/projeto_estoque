@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block cabecalho %}
+<h2>Signup</h2>
+{% endblock %}
+
+
+{% block col-esquerda %}
+<form method="POST">
+    {% csrf_token %}
+    <!-- usando api form, nesse caso o form não sera uma tabela e sim componente <p> -->
+    {{ form.as_p}}
+    <button type="submit">SignUp</button>
+</form>
+
+{% endblock %}
+    

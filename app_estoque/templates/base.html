@@ -49,11 +49,28 @@
           <li class="nav-item">
               <span id="movimentacao"> <a class="nav-link" href="{% url 'estoque_detalhe' id_produto=0 %}">Movimentacao</a></span>
           </li>
+
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        <ul class="navbar-nav mr-2">
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ user.username |upper }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="{% url 'password_change' %}">Trocar Senha</a>
+                  <a class="dropdown-item" href="{% url 'logout' %}">Sair</a>
+                </div>
+            </li>
+            {% else %}
+              <a class="nav-link" href="{% url 'signup' %}">Sign Up </a>
+              <a class="nav-link" href="{% url 'login' %}">Login </a>
+            {% endif %}
+            
+        </ul>
+        
+        <p>versão 1.0</p>
+  
       </div>
     </nav>
 
@@ -94,8 +111,9 @@
     </main>
 
     <footer class="container">
+    
       <p>&copy; Kafework 2018 </p>
-      <img src="{% static "app_estoque/logo.png" %}" class="rounded float-left" alt="...">    
+      <!-- <img src="{% static "app_estoque/logo.png" %}" class="rounded float-left" alt="...">     -->
 
     </footer>
 

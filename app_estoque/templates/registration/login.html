@@ -11,8 +11,23 @@
     </div>
     <h1 class="display-3">Controle de Estoque</h1>
     <p>Sistema para gestão de entrada e saida de produto copa e limpeza do estoque</p>
+    <p><Faça seu Login</p>
     <p>
-      <p>seja bem vindo, {% if user.is_authenticated %} {{user.username}} {% else %} Visitante ! {% endif %}</p> 
+      {% if user.is_authenticated %}
+        <p>seja bem vindo, {{user.username}}
+
+      {% else %}
+
+      <form method="POST">
+          {% csrf_token %}
+          <!-- usando api form, nesse caso o form não sera uma tabela e sim componente <p> -->
+          {{ form.as_p}}
+          <button type="submit">Login</button>
+          <a href="{% url 'password_reset' %}">esqueceu seu password</a>
+      </form>  
+
+      {% endif %}
+       
       <strong>total de usuarios registrados: </strong>  {{count }}
     </p>
   </div>

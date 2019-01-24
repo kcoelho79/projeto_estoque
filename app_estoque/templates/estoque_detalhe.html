@@ -14,6 +14,7 @@
   {% csrf_token %}
 
 <select name="f_item" id="select_cod">
+
   {% for produto in produtos %}
     <option name="f_item" value={{produto.id}}>{{produto.item_text}}</option>
   {% endfor %}
