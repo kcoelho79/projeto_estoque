@@ -1,5 +1,5 @@
 import environ
-from controleAcesso.settings.base import *
+from projeto_estoque.settings.base import *
 env = environ.Env()
 DEBUG = env.bool("DEBUG", False)
 SECRET_KEY = env("SECRET_KEY")
