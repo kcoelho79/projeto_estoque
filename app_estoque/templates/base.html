@@ -58,8 +58,8 @@
                     {{ user.username |upper }}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="{% url 'password_change' %}">Trocar Senha</a>
-                  <a class="dropdown-item" href="{% url 'logout' %}">Sair</a>
+                  <a class="dropdown-item" href="{% url 'account_change_password' %}">Trocar Senha</a>
+                  <a class="dropdown-item" href="{% url 'account_logout' %}">Sair</a>
                 </div>
             </li>
             {% else %}
