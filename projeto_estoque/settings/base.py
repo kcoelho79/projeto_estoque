@@ -34,7 +34,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.4', 'testapp.com']
 
 INSTALLED_APPS = [
     'mathfilters',
-    'app_estoque',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'app_estoque',
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
